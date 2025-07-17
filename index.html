@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ayesha Atta - Cybersecurity Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Orbitron:wght@400;700&display=stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --text-color: #e6edf3;
+            --container-bg: #161b22;
+            --accent-color: #40c4ff;
+            --accent-hover: #0288d1;
+            --shadow-color: rgba(64, 196, 255, 0.3);
+            --secondary-bg: #1c2526;
+        }
+        [data-theme="light"] {
+            --bg-color: #fafafa;
+            --text-color: #1f2937;
+            --container-bg: #e5e7eb;
+            --accent-color: #1e3a8a;
+            --accent-hover: #2dd4bf;
+            --shadow-color: rgba(30, 58, 138, 0.3);
+            --secondary-bg: #d1d5db;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+        #header-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.15;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        nav {
+            position: sticky;
+            top: 0;
+            background: var(--bg-color);
+            padding: 15px 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--accent-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 101;
+            padding: 10px;
+        }
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--accent-color);
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+        .nav-links.active {
+            display: flex;
+        }
+        nav a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1em;
+            padding: 5px 10px;
+            transition: color 0.3s;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        nav a:nth-child(1) { animation-delay: 0.1s; }
+        nav a:nth-child(2) { animation-delay: 0.2s; }
+        nav a:nth-child(3) { animation-delay: 0.3s; }
+        nav a:nth-child(4) { animation-delay: 0.4s; }
+        nav a:nth-child(5) { animation-delay: 0.5s; }
+        nav a:nth-child(6) { animation-delay: 0.6s; }
+        nav a:nth-child(7) { animation-delay: 0.7s; }
+        nav a:nth-child(8) { animation-delay: 0.8s; }
+        nav a:hover, nav a:visited {
+            color: var(--accent-hover);
+        }
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            font-size: 1.4em;
+            cursor: pointer;
+            transition: color 0.3s;
+            opacity: 0;
+            animation: slideIn 0.8s ease-out 0.2s forwards;
+        }
+        .theme-toggle:hover {
+            color: var(--accent-hover);
+        }
+        header {
+            position: relative;
+            padding: 40px 15px;
+            background: linear-gradient(135deg, var(--container-bg), var(--bg-color));
+            border-bottom: 3px solid var(--accent-color);
+            z-index: 2;
+        }
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://via.placeholder.com/1200x400?text=Cybersecurity+Background') center/cover no-repeat;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        .profile-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            position: relative;
+            z-index: 2;
+        }
+        .theme-toggle-container {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            z-index: 3;
+        }
+        .profile-photo {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            /* border: 4px solid var(--accent-color); */
+            object-fit: fill;
+            transition: transform 0.3s, width 0.3s, height 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.8s ease-out forwards;
+        }
+        .profile-photo:hover {
+            transform: scale(1.1);
+            width: 280px;
+            height: 280px;
+        }
+        .profile-info {
+            flex: 1;
+            text-align: left;
+            max-width: 600px;
+        }
+        .resume-btn {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 1em;
+            transition: background 0.3s;
+            opacity: 0;
+            animation: slideIn 0.8s ease-out 0.4s forwards;
+        }
+        .resume-btn:hover {
+            background: var(--accent-hover);
+        }
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2em, 5vw, 2.8em);
+            color: var(--accent-color);
+            text-shadow: 0 0 12px var(--shadow-color);
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideText 1s ease-out 0.2s forwards;
+        }
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.5em, 4vw, 1.9em);
+            color: var(--accent-color);
+            margin: 40px 0 15px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideText 1s ease-out forwards;
+        }
+        h3 {
+            font-size: clamp(1.2em, 3vw, 1.4em);
+            color: var(--text-color);
+        }
+        p, li {
+            font-size: clamp(0.9em, 2.5vw, 1.1em);
+        }
+        .contact-links a {
+            color: var(--accent-color);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: clamp(0.9em, 2.5vw, 1.1em);
+            transition: color 0.3s, text-shadow 0.3s;
+            opacity: 0;
+            animation: slideIn 0.8s ease-out 0.4s forwards;
+        }
+        .contact-links a:hover {
+            color: var(--accent-hover);
+            text-shadow: 0 0 8px var(--shadow-color);
+        }
+        .contact-links a:visited {
+            color: var(--accent-color);
+        }
+        section {
+            padding: 40px 15px;
+            position: relative;
+            z-index: 2;
+        }
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-color);
+            transform: translateX(-50%);
+        }
+        .timeline-item {
+            position: relative;
+            width: 60%;
+            margin: 15px 0;
+            padding: 15px;
+            background: var(--container-bg);
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            animation: slideInTimeline 0.8s ease-out forwards;
+        }
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            transform: translateX(-20px);
+            animation: slideInTimelineLeft 0.8s ease-out forwards;
+        }
+        .timeline-item:nth-child(even) {
+            left: 40%;
+            transform: translateX(20px);
+            animation: slideInTimelineRight 0.8s ease-out forwards;
+        }
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            width: 16px;
+            height: 16px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            border: 2px solid var(--bg-color);
+        }
+        .timeline-item:nth-child(odd)::before {
+            right: -30px;
+        }
+        .timeline-item:nth-child(even)::before {
+            left: -30px;
+        }
+        .timeline-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        .item-container {
+            background: var(--container-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        .projects .item-container {
+            display: flex;
+            gap: 20px;
+        }
+        .item-container:nth-child(1) { animation-delay: 0.1s; }
+        .item-container:nth-child(2) { animation-delay: 0.2s; }
+        .item-container:nth-child(3) { animation-delay: 0.3s; }
+        .item-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        .project-image-container {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .project-image {
+            width: clamp(200px, 40vw, 300px);
+            height: clamp(150px, 30vw, 200px);
+            border-radius: 8px;
+            border: 2px solid var(--accent-color);
+            object-fit: cover;
+            transition: transform 0.3s;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .project-image:hover {
+            transform: scale(1.05);
+        }
+        .project-content {
+            flex: 1;
+        }
+        .project-credentials {
+            margin-top: 10px;
+        }
+        .project-credentials a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        .project-credentials a:hover, .project-credentials a:visited {
+            color: var(--accent-hover);
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+        }
+        .skills-grid li {
+            background: var(--secondary-bg);
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            transition: background 0.3s, color 0.3s;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .skills-grid li:nth-child(odd) { animation-delay: 0.1s; }
+        .skills-grid li:nth-child(even) { animation-delay: 0.2s; }
+        .skills-grid li:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+        .contact-form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: var(--container-bg);
+            border-radius: 8px;
+        }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid var(--accent-color);
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            border-radius: 4px;
+            font-size: clamp(0.9em, 2.5vw, 1em);
+        }
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--accent-hover);
+            box-shadow: 0 0 8px var(--shadow-color);
+        }
+        .contact-form button {
+            background: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: clamp(0.9em, 2.5vw, 1em);
+            transition: background 0.3s;
+        }
+        .contact-form button:hover {
+            background: var(--accent-hover);
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .contact-item i {
+            color: var(--accent-color);
+            font-size: clamp(1em, 3vw, 1.2em);
+            transition: color 0.3s;
+        }
+        .contact-item a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .contact-item a:hover {
+            color: var(--accent-hover);
+        }
+        .contact-item a:visited {
+            color: var(--accent-color);
+        }
+        .contact-item a:hover i {
+            color: var(--accent-hover);
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: var(--container-bg);
+            color: var(--text-color);
+            font-size: clamp(0.8em, 2vw, 0.9em);
+            position: relative;
+            z-index: 2;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideText {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInTimelineLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInTimelineRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInNav {
+            from { opacity: 0; transform: translateX(-100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @media (max-width: 767px) {
+            .hamburger {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: fixed;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: var(--container-bg);
+                padding: 15px;
+                z-index: 100;
+                animation: slideInNav 0.3s ease-out forwards;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            nav a {
+                font-size: 1em;
+                padding: 10px;
+                text-align: center;
+            }
+            nav {
+                padding: 10px 0;
+                justify-content: flex-start;
+            }
+            .container {
+                padding: 0 10px;
+            }
+            header {
+                padding: 30px 10px;
+            }
+            h1 {
+                font-size: clamp(1.8em, 4vw, 2em);
+            }
+            h2 {
+                font-size: clamp(1.4em, 3vw, 1.5em);
+            }
+            h3 {
+                font-size: clamp(1.1em, 2.5vw, 1.2em);
+            }
+            p, li {
+                font-size: clamp(0.85em, 2vw, 0.95em);
+            }
+            .profile-photo {
+                width: 200px;
+                height: 200px;
+            }
+            .profile-photo:hover {
+                width: 180px;
+                height: 180px;
+            }
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            .profile-info {
+                text-align: center;
+            }
+            .resume-btn {
+                margin: 10px auto;
+                display: block;
+            }
+            .theme-toggle-container {
+                right: 10px;
+                top: 10px;
+            }
+            .timeline::before {
+                left: 15px;
+            }
+            .timeline-item {
+                width: calc(100% - 40px);
+                left: 30px !important;
+                transform: translateX(0);
+                animation: fadeInUp 0.6s ease-out forwards;
+            }
+            .timeline-item::before {
+                left: -25px;
+            }
+            .projects .item-container {
+                flex-direction: column;
+            }
+            .project-image {
+                width: 100%;
+                max-width: 300px;
+                height: auto;
+            }
+            .skills-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 10px;
+            }
+            .contact-form {
+                padding: 15px;
+            }
+        }
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .container {
+                max-width: 900px;
+                padding: 0 20px;
+            }
+            nav {
+                padding: 12px 0;
+            }
+            .nav-links {
+                gap: 15px;
+            }
+            nav a {
+                font-size: 1em;
+                padding: 5px 8px;
+            }
+            .profile-photo {
+                width: 200px;
+                height: 200px;
+            }
+            .profile-photo:hover {
+                width: 230px;
+                height: 230px;
+            }
+            .project-image {
+                width: 250px;
+                height: 160px;
+            }
+            .timeline-item {
+                width: 55%;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <canvas id="background-canvas"></canvas>
+    <nav>
+        <div class="container">
+            <button class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#experience">Experience</a>
+                <a href="#education">Education</a>
+                <a href="#projects">Projects</a>
+                <a href="#skills">Skills</a>
+                <a href="#certifications">Certifications</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+    <header id="home">
+        <canvas id="header-canvas"></canvas>
+        <div class="header-bg"></div>
+        <div class="container">
+            <div class="theme-toggle-container">
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            <div class="profile-section">
+                <img src="pingacf.png" alt="Ayesha Atta" class="profile-photo" id="profile-photo">
+                <div class="profile-info">
+                    <h1>Ayesha Atta</h1>
+                    <p>Cybersecurity Specialist | Computer Science Graduate</p>
+                    <div class="contact-links">
+                        <a href="mailto:ayesha.atta1725@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+                        <a href="https://github.com/Aish689" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                        <a href="https://www.linkedin.com/in/ayesha-khan-6684b72b0/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    </div>
+                </div>
+                <a href="Ayesha_CV.pdf" target="_blank" class="resume-btn">Download Resume</a>
+            </div>
+        </div>
+    </header>
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <div class="item-container">
+                <p>Dynamic and detail-oriented Computer Science graduate with a specialization in cybersecurity, networking, and Linux systems. Proficient in designing and implementing innovative security solutions, including phishing URL detectors, SOC automation tools, and penetration testing frameworks. Skilled in enhancing enterprise security through real-time threat detection, email alerting, and multi-source analysis. Passionate about advancing Security Operations Center (SOC) workflows and securing digital infrastructures against evolving threats.</p>
+            </div>
+        </div>
+    </section>
+    <section id="experience" class="experience">
+        <div class="container">
+            <h2>Professional Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Cybersecurity Project Developer | University of Sargodha</h3>
+                    <p>2023 - 2025</p>
+                    <p>Led the development of "PhishGuard," a Python-based phishing URL detection system utilizing Kali Linux and Mailtrap for real-time threat identification. Implemented machine learning algorithms for URL analysis, real-time email alerts, and multi-source scanning. Conducted research to optimize SOC workflows, resulting in a 20% improvement in threat response time during testing.</p>
+                    <p><strong>Key Achievements:</strong></p>
+                    <ul>
+                        <li>Designed and deployed a scalable system integrating open-source intelligence (OSINT) feeds.</li>
+                        <li>Automated email alerting system, reducing notification delays by 30%.</li>
+                        <li>Presented findings at university symposium, earning recognition for innovative approach.</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <h3>Penetration Testing Analyst | Independent Project</h3>
+                    <p>2024</p>
+                    <p>Conducted comprehensive penetration testing on OWASP Juice Shop using Burp Suite, OWASP ZAP, and Kali Linux. Identified critical vulnerabilities including XSS, SQL Injection, and Broken Access Control. Delivered detailed reports with actionable mitigation strategies, reducing potential exploit risks by 85%.</p>
+                    <p><strong>Key Achievements:</strong></p>
+                    <ul>
+                        <li>Developed automated scripts to streamline vulnerability scanning processes.</li>
+                        <li>Simulated real-world attack scenarios, improving system resilience.</li>
+                        <li>Documented findings in a professional report, adopted as a case study in coursework.</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <h3>Network Security Analyst | Independent Project</h3>
+                    <p>2024</p>
+                    <p>Developed a Python-based port scanner integrated with Nmap for service detection and network mapping. Analyzed network traffic using Wireshark to identify suspicious packets and demonstrated DNS hijacking scenarios in a controlled environment.</p>
+                    <p><strong>Key Achievements:</strong></p>
+                    <ul>
+                        <li>Created a modular tool for scanning IP ranges with detailed logging capabilities.</li>
+                        <li>Identified and mitigated 95% of simulated network threats in testing.</li>
+                        <li>Shared tool with peers, enhancing collaborative learning in network security.</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <h3>Security Operations Center Intern | TechSecure Solutions</h3>
+                    <p>Jan 2024 - Jun 2024</p>
+                    <p>Assisted in monitoring and analyzing security events using Splunk and QRadar. Contributed to incident response processes, reducing average resolution time by 15%. Developed scripts to automate log analysis, improving team efficiency.</p>
+                    <p><strong>Key Achievements:</strong></p>
+                    <ul>
+                        <li>Automated repetitive SOC tasks, saving 10 hours weekly.</li>
+                        <li>Assisted in identifying and mitigating phishing campaigns targeting enterprise clients.</li>
+                        <li>Received commendation for proactive threat hunting initiatives.</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <h3>Event Management Society Member | University of Sargodha</h3>
+                    <p>2024</p>
+                    <p>Organized university-wide events, coordinating logistics for over 500 attendees. Enhanced teamwork and leadership skills through collaboration with diverse teams. Volunteered in admissions processes, earning a certificate for contributions.</p>
+                    <p><strong>Key Achievements:</strong></p>
+                    <ul>
+                        <li>Streamlined event planning processes, reducing setup time by 25%.</li>
+                        <li>Led a team of 10 volunteers to ensure seamless event execution.</li>
+                        <li>Recognized for outstanding organizational contributions.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="education" class="education">
+        <div class="container">
+            <h2>Education</h2>
+            <div class="item-container">
+                <h3>Bachelor of Science in Computer Science</h3>
+                <p>University of Sargodha, Pakistan | 2021 - 2025</p>
+                <p>Percentage: 79% | Relevant Coursework: Cryptography, Network Security, Operating Systems, Data Structures, AI</p>
+            </div>
+            <div class="item-container">
+                <h3>Intermediate in Computer Science (ICS)</h3>
+                <p>Superior College, Mianwali, Pakistan | 2019 - 2021</p>
+                <p>Percentage: 97% | Focused on programming fundamentals and computer architecture</p>
+            </div>
+            <div class="item-container">
+                <h3>Matriculation</h3>
+                <p>Government Girls High School, Mianwali, Pakistan | 2017 - 2019</p>
+                <p>Percentage: 82% | Emphasis on mathematics and sciences</p>
+            </div>
+        </div>
+    </section>
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2>Projects</h2>
+            <div class="item-container">
+                <div class="project-image-container">
+                    <img src="phDetector.png" alt="PhishGuard Project" class="project-image">
+                    <div class="project-credentials">
+                        <p><strong>Credentials:</strong> <a href="https://github.com/Aish689/Phishing_Detector" target="_blank">GitHub Repository</a></p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3>PhishGuard: SOC-Centric Phishing Analyzer</h3>
+                    <p><strong>Tools:</strong> Kali Linux, Python, Mailtrap</p>
+                    <p>Developed an automated phishing URL detection system with real-time email alerts and multi-source scanning. Integrated OSINT feeds for enhanced threat intelligence. Currently expanding into a research study to optimize SOC workflows.</p>
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="project-image-container">
+                    <img src="juiceShop.png" alt="OWASP Juice Shop Project" class="project-image">
+                    <div class="project-credentials">
+                        <p><strong>Credentials:</strong> <a href="https://github.com/Aish689/OWASP_Juice_shop_Pentesting" target="_blank">GitHub Repository</a></p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3>OWASP Juice Shop Penetration Testing</h3>
+                    <p><strong>Tools:</strong> Burp Suite, OWASP ZAP, Docker, Kali Linux</p>
+                    <p>Performed penetration testing, identifying vulnerabilities such as XSS, SQL Injection, and Broken Access Control. Delivered detailed mitigation reports adopted in academic settings.</p>
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="project-image-container">
+                    <img src="portscanner.png" alt="Port Scanner Project" class="project-image">
+                    <div class="project-credentials">
+                        <p><strong>Credentials:</strong> <a href="https://github.com/Aish689/Port_Scanner_Project" target="_blank">GitHub Repository</a></p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3>Automated Port Scanner</h3>
+                    <p><strong>Tools:</strong> Python (socket), Nmap</p>
+                    <p>Built a modular tool to scan IP ranges for open ports, integrated with Nmap for service detection and detailed logging. Improved network auditing efficiency by 40%.</p>
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="project-image-container">
+                    <img src="projectpic.jpg" alt="Network Analysis Project" class="project-image">
+                    <div class="project-credentials">
+                        <p><strong>Credentials:</strong> <a href="https://github.com/Aisthos/NetworkAnalysis" target="_blank">GitHub Repository</a></p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3>Network Traffic Analysis</h3>
+                    <p><strong>Tools:</strong> Wireshark</p>
+                    <p>Analyzed real-time network traffic, identified suspicious packets, and demonstrated DNS hijacking scenarios. Exported logs for detailed investigation, used in academic presentations.</p>
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="project-image-container">
+                    <img src="fyp.png" alt="Attendance System Project" class="project-image">
+                    <div class="project-credentials">
+                        <p><strong>Credentials:</strong> <a href="https://github.com/Aish689" target="_blank">GitHub Repository</a></p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3>AI-Powered Attendance System</h3>
+                    <p><strong>Tools:</strong> Android Studio, Firebase, Python, JavaScript</p>
+                    <p>Developed an AI-driven attendance system using device ID and location tracking to prevent proxy attendance. Achieved 98% accuracy in attendance verification.</p>
+                </div>
+            </div>
+            <div class="item-container">
+                <div class="project-image-container">
+                    <img src="project.jpg" alt="Network Infrastructure Project" class="project-image">
+                    <div class="project-credentials">
+                        <p><strong>Credentials:</strong> <a href="https://github.com/Aish689" target="_blank">GitHub Repository</a></p>
+                    </div>
+                </div>
+                <div class="project-content">
+                    <h3>Organizational Network Infrastructure</h3>
+                    <p><strong>Tools:</strong> Cisco Packet Tracer</p>
+                    <p>Designed and simulated a secure network infrastructure with VLANs and firewalls, ensuring robust device communication and integrity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2>Technical Skills</h2>
+            <ul class="skills-grid">
+                <li>Python</li>
+                <li>Bash</li>
+                <li>PHP</li>
+                <li>C++</li>
+                <li>C</li>
+                <li>Java</li>
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>XML</li>
+                <li>JavaScript</li>
+                <li>Nmap</li>
+                <li>Wireshark</li>
+                <li>Burp Suite</li>
+                <li>Metasploit</li>
+                <li>OWASP ZAP</li>
+                <li>Nessus</li>
+                <li>Android Studio</li>
+                <li>Linux</li>
+                <li>Firebase</li>
+                <li>Replit</li>
+                <li>VS Code</li>
+                <li>Codeblocks</li>
+                <li>Google Colab</li>
+                <li>DevOps</li>
+                <li>Computer Networks</li>
+                <li>Cryptography</li>
+                <li>Internet Protocols</li>
+                <li>Data Structures</li>
+                <li>OOP</li>
+                <li>Information Security</li>
+                <li>Operating Systems</li>
+                <li>AI</li>
+                <li>Web Development</li>
+                <li>Android Development</li>
+                <li>Splunk</li>
+                <li>QRadar</li>
+            </ul>
+        </div>
+    </section>
+    <section id="certifications" class="certifications">
+        <div class="container">
+            <h2>Certifications</h2>
+            <div class="item-container">
+                <p>Certified Ethical Hacker (CEH) | LinkedIn Learning | 2025</p>
+                <p><strong>Credentials:</strong> <a href="https://www.linkedin.com/learning/certificates/53d7670911ccd81bbce16c9ee9d93d71bea57e2b1e5e95c7dd8184a53c579870" target="_blank">View Certificate</a></p>
+            </div>
+            <div class="item-container">
+                <p>IBM Cybersecurity Analyst | Coursera | In Progress</p>
+                <p><strong>Credentials:</strong> <a href="https://www.coursera.org/user/ayesha-atta-ibm" target="_blank">View Progress</a></p>
+            </div>
+            <div class="item-container">
+                <p>Linux System Administration | KodeKloud | 2024</p>
+                <p><strong>Credentials:</strong> <a href="https://www.linkedin.com/in/ayesha-khan-6684b72b0/" target="_blank">View Certificate</a></p>
+            </div>
+            <div class="item-container">
+                <p>Google Cybersecurity | Coursera | In Progress</p>
+                <p><strong>Credentials:</strong> <a href="https://www.coursera.org/user/ayesha-atta-google" target="_blank">View Progress</a></p>
+            </div>
+            <div class="item-container">
+                <p>CompTIA Security+ | LinkedIn Learning | 2025</p>
+                <p><strong>Credentials:</strong> <a href="https://www.linkedin.com/learning/certificates/637ad1953ed0cfc015e01d5f31a91a33af529ec8aec47fbeb0666383bc64bd57" target="_blank">View Certificate</a></p>
+            </div>
+            <div class="item-container">
+                <p>AWS Certified Cloud Practitioner | LinkedIn Learning | 2025</p>
+                <p><strong>Credentials:</strong> <a href="https://media.licdn.com/dms/image/v2/D4D2DAQFCvTWaiRXkRA/profile-treasury-image-shrink_1280_1280/B4DZd8FSO9GYAQ-/0/1750133451664?e=1752688800&v=beta&t=ShyDxxMd3nzIU_ecxBWE9zGKlquZ9rRnxfqHsbr5tY0" target="_blank">View Certificate</a></p>
+            </div>
+        </div>
+    </section>
+    <section id="extracurricular" class="extracurricular">
+        <div class="container">
+            <h2>Extracurricular Activities</h2>
+            <div class="item-container">
+                <p><strong>Event Management Society Member</strong> | 2024</p>
+                <p>Organized university events for over 500 attendees, enhancing teamwork and leadership skills.</p>
+            </div>
+            <div class="item-container">
+                <p><strong>Admissions Volunteer</strong> | 2024</p>
+                <p>Assisted in streamlining admissions processes, earning a certificate of recognition.</p>
+            </div>
+        </div>
+    </section>
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contact Me</h2>
+            <div class="item-container">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <p><strong>Email:</strong> <a href="mailto:ayesha.atta1725@gmail.com" aria-label="Email: ayesha.atta1725@gmail.com">ayesha.atta1725@gmail.com</a></p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <p><strong>Phone:</strong> <a href="tel:+92315172514" aria-label="Phone: +92 315 172514">+92 315 172514</a></p>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-github"></i>
+                    <p><strong>GitHub:</strong> <a href="https://github.com/Aish689" target="_blank" aria-label="GitHub: github.com/Aish689">github.com/Aish689</a></p>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-linkedin"></i>
+                    <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/ayesha-khan-6684b72b0/" target="_blank" aria-label="LinkedIn: linkedin.com/in/ayesha-khan-6684b72b0">linkedin.com/in/ayesha-khan-6684b72b0</a></p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p><strong>Address:</strong> <a href="#" aria-label="Address: Kundian, Mianwali, Pakistan">Kundian, Mianwali, Pakistan</a></p>
+                </div>
+            </div>
+            <div class="contact-form">
+                <form action="https://formspree.io/f/xeokbwrn" method="POST">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                    <input type="email" name="email" placeholder="Your Email" required>
+                    <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <p>© 2025 Ayesha Atta. All rights reserved.</p>
+    </footer>
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                    // Close mobile menu after clicking a link
+                    const navLinks = document.querySelector('.nav-links');
+                    const hamburger = document.querySelector('.hamburger');
+                    if (navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                        hamburger.classList.remove('active');
+                    }
+                }
+            });
+        });
+
+        // Hamburger menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Theme toggle functionality with icon and profile photo switch
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.querySelector('.theme-toggle i');
+            const profilePhoto = document.getElementById('profile-photo');
+            const currentTheme = body.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                profilePhoto.src = 'bgbluepic.jpg';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                profilePhoto.src = 'pingacf.png';
+            }
+        }
+
+        // Background canvas for matrix-style digital rain
+        const bgCanvas = document.getElementById('background-canvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        const chars = '01ABCDEF'.split('');
+        const fontSize = 14;
+        let columns, drops;
+
+        function resizeBgCanvas() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+            columns = Math.floor(bgCanvas.width / fontSize);
+            drops = Array(columns).fill(0);
+        }
+
+        function drawMatrix() {
+            bgCtx.fillStyle = 'rgba(13, 17, 23, 0.05)';
+            bgCtx.fillRect(0, 0, bgCanvas.width, bgCanvas.height);
+            bgCtx.fillStyle = 'rgba(64, 196, 255, 0.3)';
+            bgCtx.font = `${fontSize}px monospace`;
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                bgCtx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > bgCanvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        // Header canvas for particle effect
+        const headerCanvas = document.getElementById('header-canvas');
+        const headerCtx = headerCanvas.getContext('2d');
+        let particles = [];
+
+        function resizeHeaderCanvas() {
+            headerCanvas.width = headerCanvas.offsetWidth;
+            headerCanvas.height = headerCanvas.offsetHeight;
+            initParticles();
+        }
+
+        function initParticles() {
+            particles = [];
+            const numParticles = 50;
+            for (let i = 0; i < numParticles; i++) {
+                particles.push({
+                    x: Math.random() * headerCanvas.width,
+                    y: Math.random() * headerCanvas.height,
+                    radius: Math.random() * 2 + 1,
+                    vx: Math.random() * 2 - 1,
+                    vy: Math.random() * 2 - 1
+                });
+            }
+        }
+
+        function drawParticles() {
+            headerCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            headerCtx.fillRect(0, 0, headerCanvas.width, headerCanvas.height);
+            const isLightTheme = document.body.getAttribute('data-theme') === 'light';
+            headerCtx.fillStyle = isLightTheme ? 'rgba(30, 58, 138, 0.5)' : 'rgba(64, 196, 255, 0.5)';
+            
+            particles.forEach(particle => {
+                headerCtx.beginPath();
+                headerCtx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                headerCtx.fill();
+
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+
+                if (particle.x < 0 || particle.x > headerCanvas.width) particle.vx *= -1;
+                if (particle.y < 0 || particle.y > headerCanvas.height) particle.vy *= -1;
+
+                particles.forEach(other => {
+                    if (particle !== other) {
+                        const dx = particle.x - other.x;
+                        const dy = particle.y - other.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 100) {
+                            headerCtx.beginPath();
+                            headerCtx.strokeStyle = isLightTheme ? 'rgba(30, 58, 138, 0.2)' : 'rgba(64, 196, 255, 0.2)';
+                            headerCtx.lineWidth = 0.5;
+                            headerCtx.moveTo(particle.x, particle.y);
+                            headerCtx.lineTo(other.x, other.y);
+                            headerCtx.stroke();
+                        }
+                    }
+                });
+            });
+        }
+
+        // Initialize canvases and animations
+        resizeBgCanvas();
+        resizeHeaderCanvas();
+        window.addEventListener('resize', () => {
+            resizeBgCanvas();
+            resizeHeaderCanvas();
+        });
+        setInterval(drawMatrix, 50);
+        setInterval(drawParticles, 50);
+    </script>
+</body>
+</html>
